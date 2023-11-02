@@ -1,6 +1,6 @@
 # Système de Contrôle d'Éclairage Automatique
 
-Ce dépôt contient la conception et la mise en œuvre d'un circuit logique séquentiel pour un système de contrôle d'éclairage automatique. Le système a pour but de détecter la présence de personnes dans une pièce et de contrôler automatiquement l'éclairage, en l'allumant lorsque quelqu'un entre dans la pièce et en l'éteignant après une certaine période d'inactivité. De plus, il permet un contrôle manuel grâce à un interrupteur.
+Ce dépôt contient la conception et la mise en œuvre d'un circuit logique séquentiel pour un système de contrôle d'éclairage automatique pour le Devoir 2 du cours IFT1227 (Architecture des Ordinateurs I). Le système a pour but de détecter la présence de personnes dans une pièce et de contrôler automatiquement l'éclairage, en l'allumant lorsque quelqu'un entre dans la pièce et en l'éteignant après une certaine période d'inactivité. De plus, il permet un contrôle manuel grâce à un interrupteur.
 
 ## Spécification
 
