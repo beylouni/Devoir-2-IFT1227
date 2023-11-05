@@ -24,9 +24,9 @@ architecture Behavioral of LightingControl is
     type State_Type is (Initial, PresenceDetected, LightOn, LightOff);
     signal State, Next_State : State_Type;
 
-    constant Time_Period : natural := 100;  -- Durée d'un cycle en unités de temps (à ajuster)
+    constant Time_Period : time := 100 ms;  -- Durée d'un cycle en unités de temps (à ajuster)
 
-    signal Timer : natural := 0;
+    signal Timer : time := 0 ms;
 
 begin
     process (P, S, State)
