@@ -1,13 +1,3 @@
-------------------------------------------------
---                                            --
---            DEVOIR 2 - IFT1227              --
--- Luciano Beylouni / Maxime Davidson-Longpré --
---                                            --
-------------------------------------------------
-
--- CODAGE DE L'ÉCLAIRAGE AUTOMATIQUE EN VHDL
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
@@ -15,18 +5,16 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity LightingControl is
     Port ( P : in STD_LOGIC;   -- Détecteur de Présence (1 si présence, 0 sinon)
-        S : in STD_LOGIC;   -- Interrupteur Manuel (1 si activé, 0 sinon)
-        L : out STD_LOGIC   -- Commande d'Éclairage (1 pour allumé, 0 pour éteint)
-        );
+           S : in STD_LOGIC;   -- Interrupteur Manuel (1 si activé, 0 sinon)
+           L : out STD_LOGIC   -- Commande d'Éclairage (1 pour allumé, 0 pour éteint)
+          );
 end LightingControl;
 
 architecture Behavioral of LightingControl is
     type State_Type is (Initial, PresenceDetected, LightOn, LightOff);
     signal State, Next_State : State_Type;
 
-    constant Time_Period : time := 100 ms;  -- Durée d'un cycle en unités de temps (à ajuster)
-
-    signal Timer : time := 0 ms;
+    signal Timer : natural := 0;  -- Counter for time delay
 
 begin
     process (P, S, State)
@@ -66,7 +54,7 @@ begin
                         Next_State <= LightOn;  -- Présence détectée, éclairage forcé
                     end if;
                 else
-                    if Timer < Time_Period then
+                    if Timer < 3000 then  -- 3 seconds (3000 milliseconds)
                         Timer <= Timer + 1;  -- Incrémente le compteur
                         Next_State <= LightOff;  -- Maintient l'éclairage allumé
                     else
@@ -87,13 +75,5 @@ begin
             when others =>
                 L <= '0';  -- Éteint l'éclairage
         end case;
-    end process;
-
-    process
-    begin
-        wait for 1;  -- Attente pour simuler le passage du temps
-        if State /= Initial then
-            Timer <= Timer + 1;  -- Incrémente le compteur de temps
-        end if;
     end process;
 end Behavioral;
