@@ -1,111 +1,65 @@
-------------------------------------------------
---                                            --
---            DEVOIR 2 - IFT1227              --
--- Luciano Beylouni / Maxime Davidson-Longpré --
---                                            --
-------------------------------------------------
-
--- Testbench pour le circuit LightingControl
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity LightingControl_Testbench is
-end LightingControl_Testbench;
+entity Test_LightingControl is
+end Test_LightingControl;
 
-architecture Behavioral of LightingControl_Testbench is
-    signal P, S, L: STD_LOGIC;
-    signal Clock: STD_LOGIC := '0';
-    constant Clock_Period: time := 10 ns;  -- Période de l'horloge (à ajuster)
-
-    component LightingControl is
-        Port ( P : in STD_LOGIC;
-            S : in STD_LOGIC;
-            L : out STD_LOGIC
-            );
-    end component;
+architecture behavior of Test_LightingControl is
+    signal P, S, L : STD_LOGIC;
+    signal Clock : STD_LOGIC := '0';
+    constant Clock_Period : time := 10 ns;  -- Période du signal d'horloge
 
 begin
-    DUT: LightingControl port map (P, S, L);
+    -- Instance de l'unité sous test (UUT)
+    UUT: entity work.LightingControl
+        port map (P, S, L);
 
-    -- Processus de génération d'horloge
-    Clock_Process: process
+    -- Processus pour générer le signal d'horloge
+    process
     begin
-        while now < 500 ns loop  -- Simulation pendant 500 ns (à ajuster)
+        while now < 100 ms loop
             Clock <= not Clock;
             wait for Clock_Period / 2;
         end loop;
         wait;
     end process;
 
-    -- Processus de test
-    Test_Process: process
+    -- Processus pour tester le comportement de l'unité sous test (UUT)
+    process
     begin
-        P <= '0';
-        S <= '0';
-        wait for 20 ns;  -- Attendre 2 cycles d'horloge
+        P <= '0';  -- Aucune présence
+        S <= '0';  -- Éclairage automatique
+        wait for 5 ms;
 
-        P <= '1';
-        S <= '0';
-        wait for 20 ns;
+        P <= '1';  -- Présence détectée
+        S <= '0';  -- Éclairage automatique
+        wait for 2 ms;
 
-        P <= '1';
-        S <= '1';
-        wait for 20 ns;
+        P <= '1';  -- Présence détectée
+        S <= '1';  -- Éclairage forcé
+        wait for 3 ms;
 
-        P <= '0';
-        S <= '1';
-        wait for 20 ns;
+        P <= '1';  -- Présence détectée
+        S <= '0';  -- Éclairage automatique
+        wait for 4 ms;
 
-        P <= '0';
-        S <= '0';
-        wait for 20 ns;
+        P <= '0';  -- Pas de présence
+        S <= '0';  -- Éclairage automatique
+        wait for 3 ms;
 
-        P <= '1';
-        S <= '1';
-        wait for 20 ns;
+        P <= '0';  -- Pas de présence
+        S <= '1';  -- Éclairage forcé
+        wait for 3 ms;
 
-        P <= '0';
-        S <= '1';
-        wait for 20 ns;
+        P <= '0';  -- Pas de présence
+        S <= '0';  -- Éclairage automatique
+        wait for 4 ms;
 
-        P <= '1';
-        S <= '1';
-        wait for 20 ns;
-
-        P <= '0';
-        S <= '1';
-        wait for 20 ns;
-
-        P <= '0';
-        S <= '0';
-        wait for 20 ns;
-
-        P <= '1';
-        S <= '0';
-        wait for 20 ns;
-
-        P <= '1';
-        S <= '1';
-        wait for 20 ns;
-
-        P <= '0';
-        S <= '1';
-        wait for 20 ns;
-
-        P <= '0';
-        S <= '0';
-        wait for 20 ns;
-
-        P <= '1';
-        S <= '0';
-        wait for 20 ns;
-
-        P <= '0';
-        S <= '0';
-        wait for 20 ns;
+        assert L = '0' report "Erreur : La sortie L n'est pas conforme à l'attente" severity ERROR;
 
         wait;
     end process;
 
-end Behavioral;
+end behavior;
